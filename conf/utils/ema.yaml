@@ -1,0 +1,2 @@
+type : ema
+decay : 0.995

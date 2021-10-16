@@ -1,0 +1,46 @@
+train:
+  name: mnist
+  batch_size: ???
+  drop_last: True
+  
+  preprocess:
+    - type: resize
+      params:
+        size: 28
+    - type: horizontal
+    - type: tensor
+    - type: normalize
+      params:
+        mean: [0.5]
+        std: [0.5]
+
+valid:
+  name: mnist
+  batch_size: ???
+  drop_last: True
+  
+  preprocess:
+    - type: resize
+      params:
+        size: 28
+    - type: horizontal
+    - type: tensor
+    - type: normalize
+      params:
+        mean: [0.5]
+        std: [0.5]
+
+test:
+  name: mnist
+  batch_size: ???
+  drop_last: False
+
+  preprocess:
+    - type: resize
+      params:
+        size: 28
+    - type: tensor
+    - type: normalize
+      params:
+        mean: [0.5]
+        std: [0.5]

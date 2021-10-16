@@ -1,0 +1,6 @@
+type : tensorboard
+version : board
+save_parameter : True
+log_graph : False
+add_histogram : False
+on_step : True

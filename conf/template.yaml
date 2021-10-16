@@ -1,0 +1,23 @@
+defaults:
+  - log : tensorboard
+  - architecture: toy
+  - dataset: mnist
+  - loss: ce
+  - optimizer: sgd
+  - hyperparameter: toy
+  - scheduler: CosineAnnealingLR
+  - override scheduler/warmup: gradualwarmup
+
+  
+base:
+  world_size: 2
+  use_amp: True
+  mode: train_eval
+  env:
+    mode: gpu
+  seed: '0xC0FFEE'
+  save_dir: ./test
+  debug: True
+
+MASTER_ADDR: '127.0.0.1'
+MASTER_PORT: '9090'

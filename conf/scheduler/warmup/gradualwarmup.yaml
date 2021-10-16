@@ -1,0 +1,4 @@
+status: True
+params:
+  multiplier: 1
+  total_epoch: 10

@@ -1,0 +1,10 @@
+ema:
+  name : ema
+  decay : 0.995
+
+early_stop:
+  name : early_stop
+  patience : 20
+  verbos : True
+  path : None
+

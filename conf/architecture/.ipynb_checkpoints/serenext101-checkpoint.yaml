@@ -1,0 +1,3 @@
+type: seresnext101_32x8d/101
+in_channel : 1
+out_channel : 2

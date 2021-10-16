@@ -1,0 +1,28 @@
+hydra : 
+  run: 
+    dir : ./
+
+defaults:
+  - log : tensorboard
+  - architecture: resnextv2
+  - dataset: custom_25d_dataset_nifti_smalldata
+  - loss: bce
+  - optimizer: adam
+  - hyperparameter: toy
+  - scheduler: CosineAnnealingLR
+  - saver: default_saver
+  - override scheduler/warmup: gradualwarmup
+  
+base:
+  world_size: 1
+  use_amp: True
+  mode: train_eval
+  env:
+    mode: gpu
+  seed: '0xC0FFEE'
+  save_dir: ./small_dataset_voooo4
+  debug: True
+  resume : False
+
+MASTER_ADDR: '127.0.0.4'
+MASTER_PORT: '9082'

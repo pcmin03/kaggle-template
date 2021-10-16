@@ -1,0 +1,29 @@
+hydra : 
+  run: 
+    dir : ./
+
+defaults:
+  - log : tensorboard
+  - architecture: resnet18
+  - dataset: custom_T1ce_nifti
+  - loss: ce
+  - optimizer: adamw
+  - hyperparameter: toy
+  - scheduler: CosineAnnealingLR
+  - saver: default_saver
+  - utils : callback_func
+  - override scheduler/warmup: no_warmup
+  
+base:
+  world_size: 1
+  use_amp: True
+  mode: train_eval
+  env:
+    mode: gpu
+  seed: '0xC0FFEE'
+  save_dir: ./2d_mask_result
+  debug: True
+  resume : False
+
+MASTER_ADDR: 127.0.0.4
+MASTER_PORT: 9082

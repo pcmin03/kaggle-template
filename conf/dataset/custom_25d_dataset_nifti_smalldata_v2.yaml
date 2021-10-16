@@ -1,0 +1,57 @@
+train:
+  name: custom_25d_dataset_nifti_smalldata
+  data_path : "../voxel/train"
+  label_dir : "./train_labels_wfold.csv"
+  output_type: "25D"
+  mri_types: ["FLAIR",  "T2w","T1w","T1wCE"]  #,
+  label_name : MGMT_value
+  patient_id : BraTS21ID
+  drop_last: True
+  batch_size: ???
+  flag_index: [0,1,3,4]  # list of flag indices or index which indicates train dataset
+  N_sample: 40
+  preprocess:
+    - type: resize
+      params:
+        size: 192
+    - type: tensor
+
+
+valid:
+  name: custom_25d_dataset_nifti_smalldata
+  data_path : "../voxel/train"
+  label_dir : "./train_labels_wfold.csv"
+  output_type: "25D"
+  mri_types: ["FLAIR",  "T2w","T1w","T1wCE"]
+  label_name : MGMT_value
+  patient_id : BraTS21ID
+  batch_size: ???
+  flag_index: [2] 
+  drop_last: True 
+  N_sample: 40
+  preprocess:
+    - type: resize
+      params:
+        size: 192
+    - type: tensor
+
+test:
+  name: custom_25d_dataset_nifti_smalldata
+  data_path : "../voxel/test"
+  label_dir : "./sample_submission.csv"
+  output_type: "25D"
+  mri_types: ["FLAIR",  "T2w","T1w","T1wCE"]
+  label_name : MGMT_value
+  patient_id : BraTS21ID
+  N_sample: 1
+  drop_last: True
+  batch_size: ???
+  preprocess:
+    - type: resize
+      params:
+        size: 192
+    - type: tensor
+    # - type: normalize
+    #   params:
+    #     mean: [0.5]
+    #     std: [0.5]

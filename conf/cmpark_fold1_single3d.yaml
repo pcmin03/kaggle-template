@@ -1,0 +1,28 @@
+hydra : 
+  run: 
+    dir : ./
+
+defaults:
+  - log : tensorboard
+  - architecture: 3d
+  - dataset: custom_25d_dataset_nifti_smalldata_resize_single3d
+  - loss: ce
+  - optimizer: adamw
+  - hyperparameter: toy
+  - scheduler: CosineAnnealingLR
+  - saver: default_saver
+  - override scheduler/warmup: gradualwarmup
+  
+base:
+  world_size: 1
+  use_amp: True
+  mode: train_eval
+  env:
+    mode: gpu
+  seed: '0xC0FFEE'
+  save_dir: ./ver2sion9
+  debug: True
+  resume : False
+
+MASTER_ADDR: '127.0.0.4'
+MASTER_PORT: '9080'

@@ -1,0 +1,65 @@
+train:
+  name: custom_dataset
+  data_directory: "./experiments/exp1/train.csv"
+  batch_size: ???
+  drop_last: True
+  flag_index: [0,1,2,3]  # list of flag indices or index which indicates train dataset
+  input_column: "input_paths"
+  target_column: "label"
+  output_type: "25D"
+  N_sample: 10
+  mri_types: ("FLAIR", "T1w", "T2w")  # 'T1wCE'
+  sampling_scheme: "sequential"  # or "random"
+  preprocess:
+    - type: resize
+      params:
+        size: 28
+    - type: horizontal
+    - type: tensor
+    - type: normalize
+      params:
+        mean: [0.5]
+        std: [0.5]
+
+valid:
+  name: custom_dataset
+  data_directory: "./experiments/exp1/train.csv"
+  batch_size: ???
+  drop_last: True
+  flag_index: 4  # list of flag indices or index which indicates train dataset
+  input_column: "input_paths"
+  target_column: "label"
+  output_type: "25D"
+  N_sample: 10
+  mri_types: ("FLAIR", "T1w", "T2w")  # 'T1wCE'
+  sampling_scheme: "sequential"  # or "random"
+  preprocess:
+    - type: resize
+      params:
+        size: 28
+    - type: horizontal
+    - type: tensor
+    - type: normalize
+      params:
+        mean: [0.5]
+        std: [0.5]
+
+test:
+  name: custom_dataset
+  data_directory: "./test.csv"
+  output_type: "25D"
+  N_sample: 10
+  mri_types: ("FLAIR", "T1w", "T2w")  # 'T1wCE'
+  batch_size: ???
+  drop_last: False
+  input_column: ???
+  sampling_scheme: "sequential"  # or "random"
+  preprocess:
+    - type: resize
+      params:
+        size: 28
+    - type: tensor
+    - type: normalize
+      params:
+        mean: [0.5]
+        std: [0.5]

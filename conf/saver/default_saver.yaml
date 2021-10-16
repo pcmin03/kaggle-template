@@ -1,0 +1,12 @@
+# Setting
+name: default_saver
+top_k: 5
+save_interval: 10
+standard: metric
+
+# path
+checkpoint_save_path: "./checkpoint/"
+top_save_path: "./checkpoint/top/"
+
+# prefix
+checkpoint_save_prefix: "checkpoint"
