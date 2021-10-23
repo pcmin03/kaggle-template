@@ -1,0 +1,110 @@
+log:
+  type: tensorboard
+  version: board
+  save_parameter: true
+  log_graph: false
+  add_histogram: false
+  on_step: true
+architecture:
+  type: resnext101_64x4d/101
+dataset:
+  train:
+    name: custom_25d_dataset_nifti_smalldata
+    data_path: ../voxel/train
+    label_dir: ./train_labels_wfold.csv
+    output_type: 25D
+    mri_types:
+    - FLAIR
+    - T2w
+    - T1w
+    - T1wCE
+    label_name: MGMT_value
+    patient_id: BraTS21ID
+    drop_last: true
+    batch_size: ???
+    flag_index:
+    - 0
+    - 1
+    - 2
+    - 3
+    N_sample: 40
+    preprocess:
+    - type: resize
+      params:
+        size: 192
+    - type: tensor
+  valid:
+    name: custom_25d_dataset_nifti_smalldata
+    data_path: ../voxel/train
+    label_dir: ./train_labels_wfold.csv
+    output_type: 25D
+    mri_types:
+    - FLAIR
+    - T2w
+    - T1w
+    - T1wCE
+    label_name: MGMT_value
+    patient_id: BraTS21ID
+    batch_size: ???
+    flag_index:
+    - 4
+    drop_last: true
+    N_sample: 40
+    preprocess:
+    - type: resize
+      params:
+        size: 192
+    - type: tensor
+  test:
+    name: custom_25d_dataset_nifti_smalldata
+    data_path: ../voxel/test
+    label_dir: ./sample_submission.csv
+    output_type: 25D
+    mri_types:
+    - FLAIR
+    - T2w
+    - T1w
+    - T1wCE
+    label_name: MGMT_value
+    patient_id: BraTS21ID
+    N_sample: 1
+    drop_last: true
+    batch_size: ???
+    preprocess:
+    - type: resize
+      params:
+        size: 192
+    - type: tensor
+loss:
+  type: bce
+optimizer:
+  type: adam
+  params:
+    lr: ???
+hyperparameter:
+  batch_size: 32
+  epochs: 50
+  lr: 0.0002
+scheduler:
+  warmup:
+    status: true
+    params:
+      multiplier: 1
+      total_epoch: 10
+  type: CosineAnnealingLR
+  params:
+    T_max: ???
+saver:
+  name: default_saver
+  top_k: 5
+  mode: max
+base:
+  name: savertest
+  use_amp: true
+  mode: train_eval
+  env:
+    mode: gpu
+  seed: '0xC0FFEE'
+  save_dir: test
+  debug: true
+  resume: false

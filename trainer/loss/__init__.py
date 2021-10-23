@@ -4,7 +4,7 @@ from .MVL import MeanVarianceLoss
 
 LOGGER = logging.getLogger(__name__)
 
-def create(conf, rank):
+def create(conf):
 
     if conf['type'] == 'ce':
         criterion = nn.CrossEntropyLoss()

@@ -1,0 +1,2 @@
+[2021-10-19 16:43:14,367][timm.models.helpers][INFO] - Loading pretrained weights from url (https://download.pytorch.org/models/resnet18-5c106cde.pth)
+[2021-10-19 16:43:14,433][timm.models.helpers][INFO] - Converted input conv conv1 pretrained weights from 3 to 1 channel(s)

@@ -1,0 +1,93 @@
+log:
+  type: tensorboard
+  version: board
+  save_parameter: true
+  log_graph: false
+  add_histogram: false
+  on_step: true
+architecture:
+  type: resnet18/18
+  in_channel: 1
+  out_channel: 2
+dataset:
+  train:
+    name: mnist
+    batch_size: ???
+    drop_last: true
+    preprocess:
+    - type: resize
+      params:
+        size: 28
+    - type: horizontal
+    - type: tensor
+    - type: normalize
+      params:
+        mean:
+        - 0.5
+        std:
+        - 0.5
+  valid:
+    name: mnist
+    batch_size: ???
+    drop_last: true
+    preprocess:
+    - type: resize
+      params:
+        size: 28
+    - type: horizontal
+    - type: tensor
+    - type: normalize
+      params:
+        mean:
+        - 0.5
+        std:
+        - 0.5
+  test:
+    name: mnist
+    batch_size: ???
+    drop_last: false
+    preprocess:
+    - type: resize
+      params:
+        size: 28
+    - type: tensor
+    - type: normalize
+      params:
+        mean:
+        - 0.5
+        std:
+        - 0.5
+loss:
+  type: ce
+optimizer:
+  type: adam
+  params:
+    lr: ???
+hyperparameter:
+  batch_size: 32
+  epochs: 50
+  lr: 0.0002
+  num_workers: 8
+scheduler:
+  warmup:
+    status: true
+    params:
+      multiplier: 1
+      total_epoch: 10
+  type: CosineAnnealingLR
+  params:
+    T_max: ???
+saver:
+  name: default_saver
+  top_k: 5
+  mode: max
+base:
+  name: savertest
+  use_amp: true
+  mode: train_eval
+  env:
+    mode: gpu
+  seed: '0xC0FFEE'
+  save_dir: test
+  debug: true
+  resume: false

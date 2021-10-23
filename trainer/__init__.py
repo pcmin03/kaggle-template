@@ -6,3 +6,4 @@ from . import dataset
 from . import log
 from . import saver
 from . import utils
+from . import task

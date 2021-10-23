@@ -1,3 +1,4 @@
 batch_size: 10
 epochs: 300
 lr: 1e-3
+num_workers : 8

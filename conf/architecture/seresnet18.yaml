@@ -1,3 +1,0 @@
-type : resnet18/18
-in_channel : 1
-out_channel : 2

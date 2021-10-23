@@ -1,12 +1,14 @@
-hydra : 
-  run: 
-    dir : ./
+hydra:
+  run:  # Create single folder with timestamp for output.
+    dir: ./${base.save_dir}/${now:%Y-%m-%d_%H-%M-%S}
+  sweep:  # Project name included for better grouping.
+    dir: ./${base.save_dir}/${now:%Y-%m-%d_%H-%M-%S}
 
 defaults:
   - log : tensorboard
-  - architecture: resnext
-  - dataset: custom_25d_dataset_nifti_smalldata
-  - loss: bce
+  - architecture: resnet18
+  - dataset: mnist
+  - loss: ce
   - optimizer: adam
   - hyperparameter: toy
   - scheduler: CosineAnnealingLR
@@ -14,15 +16,12 @@ defaults:
   - override scheduler/warmup: gradualwarmup
   
 base:
-  world_size: 2
+  name : savertest
   use_amp: True
   mode: train_eval
   env:
     mode: gpu
   seed: '0xC0FFEE'
-  save_dir: ./pngdataset
+  save_dir: test
   debug: True
   resume : False
-
-MASTER_ADDR: '127.0.0.3'
-MASTER_PORT: '9096'
