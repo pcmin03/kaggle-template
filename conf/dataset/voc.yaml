@@ -1,0 +1,46 @@
+train:
+  name: voc
+  batch_size: ???
+  drop_last: True
+  
+  preprocess:
+    - type: randomcrop
+      params : 
+        size : [128,128]
+    - type: horizontal
+    - type: tensor
+    - type: normalize
+      params:
+        mean: [0.5]
+        std: [0.5]
+
+valid:
+  name: voc
+  batch_size: ???
+  drop_last: True
+  
+  preprocess:
+    - type: randomcrop
+      params : 
+        size : [128,128]
+    - type: horizontal
+    - type: tensor
+    - type: normalize
+      params:
+        mean: [0.5]
+        std: [0.5]
+
+test:
+  name: voc
+  batch_size: ???
+  drop_last: False
+
+  preprocess:
+    - type: randomcrop
+      params : 
+        size : [128,128]
+    - type: tensor
+    - type: normalize
+      params:
+        mean: [0.5]
+        std: [0.5]

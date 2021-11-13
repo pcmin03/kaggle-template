@@ -1,0 +1,4 @@
+type : None
+in_channel : 3
+out_channel : 2
+pretrained : True

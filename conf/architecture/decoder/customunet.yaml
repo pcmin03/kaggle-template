@@ -1,0 +1,4 @@
+status : True
+type : 'custom_unet'
+pooling : 'avg'
+activation : 'None'

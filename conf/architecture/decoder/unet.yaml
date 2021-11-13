@@ -1,0 +1,4 @@
+status : True
+type : 'unet'
+pooling : 'avg'
+activation : 'None'

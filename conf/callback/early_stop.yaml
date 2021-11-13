@@ -1,0 +1,4 @@
+type : early_stop123123
+patience : 200
+verbos : True
+path : None

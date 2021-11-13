@@ -6,7 +6,7 @@ hydra:
 
 defaults:
   - log : tensorboard
-  - architecture: resnet18
+  - architecture: resnext
   - architecture/decoder: unet
   - dataset: endoscopy
   - loss: ce
@@ -21,11 +21,8 @@ base:
   use_amp : True
   env :
     mode : gpu
-    gpus : "1"
+    gpus : "2"
   seed : '0xC0FFEE'
   save_dir : multiclass
   debug : False
   resume : False
-  log_epoch : 10
-  val_check : 10
-  

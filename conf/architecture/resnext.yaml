@@ -1,4 +1,4 @@
 defaults:
   - default.yaml
 
-type : resnet18/18
+type : resnext50_32x4d/18

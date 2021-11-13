@@ -1,0 +1,21 @@
+ema:
+  name : ema
+  decay : 0.995
+
+early_stop:
+  name : early_stop
+  monitor : 
+  patience : 20
+  mode : 'max'
+  path : 'early_stop'
+
+model_checkpoint : 
+  top_k: 5
+  mode : max
+  save_last : False
+  metric : 'recall'
+  
+
+  
+
+
