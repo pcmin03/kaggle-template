@@ -15,6 +15,10 @@ def create(conf, num_classes=None):
         base, architecture_name = [l.lower() for l in conf['type'].split('/')]
         if base == 'toy':
             architecture = toy.ToyModel()
+        
+        elif base == 'pawpularitymodel'
+            architecture = PawpularityModel(base,architecture_name)
+            
         else : 
             architecture = create_model(base,pretrained=conf['pretrained'])
     # use decoder
@@ -27,6 +31,8 @@ def create(conf, num_classes=None):
 
         elif decoder_conf['type'] == 'custom_unet': 
             architecture = custom_unet.CustomUnet(encoder,conf)
+
+    
 
         else : 
             raise AttributeError(f'not support architecture config: {decoder_conf}')

@@ -1,7 +1,6 @@
 import os, shutil, random
 import numpy as np
 # from torch.utils.tensorboard import SummaryWriter
-import wandb
 import torch
 
 from pathlib import Path 
@@ -15,6 +14,8 @@ from glob import glob
 import itertools
 from sklearn.metrics import roc_auc_score, roc_curve, auc
 import matplotlib.pyplot as plt
+import wandb
+
 LOGGER = logging.getLogger(__name__)
 
 class Logger(object):
@@ -25,18 +26,30 @@ class Logger(object):
                 log_graph : bool, 
                 add_histogram : bool,
                 conf) -> None :
-
         self.log_graph = log_graph
         self.add_parameter = add_parameter
         self.add_histogram = add_histogram 
         self.conf = conf
         
+        import wandb
+
+        try:
+            from kaggle_secrets import UserSecretsClient
+            user_secrets = UserSecretsClient()
+            api_key = user_secrets.get_secret("wandb_api")
+            wandb.login(key=api_key)
+            anony = None
+        except:
+            anony = "must"
+            print('If you want to use your W&B account, go to Add-ons -> Secrets and provide your W&B access token. Use the Label name as wandb_api. \nGet your W&B access token from here: https://wandb.ai/authorize')
+        
+        
         base_path = os.path.join('./version') # set dir
         if os.path.exists(base_path): 
             os.makedirs(base_path,exist_ok=True)
         # check other board 
-        self.writer = SummaryWriter(str(base_path)) 
-        current_v = glob(f'{base_path}/*')
+        self.writer = wandb.init(project='Pawpularity',config=conf,job_type='Train',anonymous='must') 
+        # current_v = glob(f'{base_path}/*')
 
         # if not current_v:
         #     self.log_path = os.path.join(base_path,'v_0')
@@ -52,7 +65,7 @@ class Logger(object):
 
                 # os.makedirs(self.log_path)
         
-        self.writer = wandb.init(config=args)
+        # self.writer = SummaryWriter(str(self.log_path)) # set logger path
         
     @property
     def return_path(self): 
@@ -61,8 +74,10 @@ class Logger(object):
     def make_filename(self,conf) -> str :
         return f'{conf.architecture.type}_{conf.optimizer.type}_{conf.loss.type}'
 
-    def update_log(self,metrics:Dict[str,float],step: Optional[int],tag:str) -> None: 
+    def update_log(self,metrics:Dict[str,float],tag:str) -> None: 
         self.keepdic = {}
+        # add tage in dictionary 
+        
         for name,value in metrics.items(): 
             if isinstance(value,torch.Tensor): 
                 value = value.item()
@@ -71,9 +86,9 @@ class Logger(object):
                 value = self.get_lr(value)
             
             if isinstance(value,dict): 
-                self.writer.add_scalars(f'{tag}/{name}',value,step)
+                self.writer.log(f'{tag}/{name}',value)
             else : 
-                self.writer.add_scalar(f'{tag}/{name}',value,step)
+                self.writer.log(f'{tag}/{name}',value)
             self.keepdic[f'{tag}/{name}'] = round(value,4)
         
     # def update_metric(self,predic:float,label:float,step: Optional[int] = None,tag:str) -> None:
@@ -89,7 +104,7 @@ class Logger(object):
             if input_array is None:    
                 input_array = torch.rand((1,1,256,256)).float()
             
-            self.writer.add_graph(model,input_array)
+            self.writer.watch(model,log_freq=100)
     
     def update_image(self,image,step: Optional[int],tag:str,name:str) -> None: 
         

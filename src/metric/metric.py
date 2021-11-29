@@ -33,16 +33,17 @@ class MetricTracker:
             predic = predic.flatten()
 
         
-        fpr,tpr,_  = roc_curve(label,predic,pos_label=2)
-        roc_auc = auc(fpr, tpr)
-        print(predic.shape,label.shape,predic)
-
+    
         spec = precision_score(label,predic>threhold,average=avg) # precision
         sens = recall_score(label,predic>threhold,average=avg) # recall
         f1 = f1_score(label,predic>threhold,average=avg) # recall
         acc = accuracy_score(label,predic>threhold) # acc
 
-        metric = {'Acc': acc,'pre':spec,'recall':sens,'f1':f1,'roc':roc_auc}
+        # fpr,tpr,_  = roc_curve(label,predic,pos_label=2)
+        # roc_auc = auc(fpr, tpr)
+        # print(predic.shape,label.shape,predic)
+
+        metric = {'Acc': acc,'pre':spec,'recall':sens,'f1':f1}
         
         
         return metric 

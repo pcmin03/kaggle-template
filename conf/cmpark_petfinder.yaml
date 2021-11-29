@@ -1,0 +1,28 @@
+hydra:
+  run:  # Create single folder with timestamp for output.
+    dir: ./${base.save_dir}/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:  # Project name included for better grouping.
+    dir: ./${base.save_dir}/${now:%Y-%m-%d}/${now:%H-%M-%S}
+
+defaults:
+  - log : tensorboard
+  - architecture: swin_base_patch4_window7_224
+  - architecture/decoder: no_decoder
+  - dataset: petfinder
+  - loss: ce
+  - optimizer: adam
+  - hyperparameter: cmpark
+  - scheduler: CosineAnnealingLR
+  - callback: default
+  - override scheduler/warmup: gradualwarmup
+  
+base:
+  mode : train
+  use_amp : True
+  env :
+    mode : gpu
+    gpus : "2"
+  seed : '0xC0FFEE'
+  save_dir : multiclass
+  debug : False
+  resume : False

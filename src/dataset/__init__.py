@@ -4,7 +4,7 @@ import torchvision.transforms as transforms
 import logging
 import os
 import pandas as pd
-from .data_utils import preprocess
+from .data_utils import preprocess,create_folds
 from .vocsegment import myVOCSegmentation
 from .endoscopy_dataset import EndoscopyData
 
@@ -31,6 +31,19 @@ def create(conf, mode='train'):
             image_set=mode,
             biopsy_loc = conf['biopsy']
             )
+    elif conf['name'] == 'petfiner': 
+        df = pd.read_csv(f"{conf['datapath']}/train.csv")
+        df['file_path'] = df['Id'].apply(lambda x : conf['train_dir']/f'{x}.jpg')
+        feature_cols = [col for col in df.columns if col not in ['Id', 'Pawpularity', 'file_path']]
+
+        df = create_folds(df, n_s=5, n_grp=14)
+        if mode == 'train': 
+            df_data = df[df.kfold != conf['fold']].reset_index(drop=True)    
+        else: 
+            df_data = df[df.kfold == conf['fold']].reset_index(drop=True)
+            
+        dataset = PawpularityDataset(conf['train_dir'],df_data,mode)
+            
     else:
         raise AttributeError(f'not support dataset config: {conf}')
     

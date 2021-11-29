@@ -1,0 +1,21 @@
+train:
+  name: endoscopy
+  batch_size: ???
+  drop_last: True
+  root_dir : "./petfinder-pawpularity-score" 
+  train_dir : './petfinder-pawpularity-score/train'
+  kfold : 0 
+  
+valid:
+  name: endoscopy
+  batch_size: ???
+  drop_last: True
+  train_dir : './petfinder-pawpularity-score/train'
+  kfold : 0 
+  
+test:
+  name: endoscopy
+  batch_size: ???
+  drop_last: False
+  test_dri = './petfinder-pawpularity-score/test'
+  
