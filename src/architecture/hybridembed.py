@@ -52,7 +52,7 @@ class PawpularityModel(nn.Module):
         self.backbone.patch_embed = HybridEmbed(self.embedder, img_size=CONFIG['img_size'], embed_dim=128)
         self.n_features = self.backbone.head.in_features
         self.backbone.reset_classifier(0)
-        self.fc = nn.Linear(self.n_features, CONFIG['num_classes'])
+        self.fc = nn.Linear(self.n_features, 1)
 
     def forward(self, images):
         features = self.backbone(images)              # features = (bs, embedding_size)

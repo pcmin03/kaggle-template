@@ -5,13 +5,13 @@ hydra:
     dir: ./${base.save_dir}/${now:%Y-%m-%d}/${now:%H-%M-%S}
 
 defaults:
-  - log : tensorboard
+  - log : wandb
   - architecture: swin_base_patch4_window7_224
   - architecture/decoder: no_decoder
   - dataset: petfinder
   - loss: ce
   - optimizer: adam
-  - hyperparameter: cmpark
+  - hyperparameter: petfinder_scrtch
   - scheduler: CosineAnnealingLR
   - callback: default
   - override scheduler/warmup: gradualwarmup
@@ -21,7 +21,7 @@ base:
   use_amp : True
   env :
     mode : gpu
-    gpus : "2"
+    gpus : "5,6"
   seed : '0xC0FFEE'
   save_dir : multiclass
   debug : False

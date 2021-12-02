@@ -6,7 +6,6 @@ from glob import glob
 import pandas as pd
 from sklearn.model_selection import StratifiedKFold
 import albumentations as A
-from albumentations.pytorch.transforms import ToTensorV2
 import cv2
 
 def ratio2cordi(imgshape,cordi): 
@@ -70,10 +69,10 @@ def create_folds(df, n_s=5, n_grp=None):
     df['kfold'] = -1
     
     if n_grp is None:
-        skf = KFold(n_splits=n_s, random_state=CONFIG['seed'])
+        skf = KFold(n_splits=n_s)
         target = df['Pawpularity']
     else:
-        skf = StratifiedKFold(n_splits=n_s, shuffle=True, random_state=CONFIG['seed'])
+        skf = StratifiedKFold(n_splits=n_s, shuffle=True)
         df['grp'] = pd.cut(df['Pawpularity'], n_grp, labels=False)
         target = df.grp
     

@@ -1,17 +1,13 @@
 import random , os 
 import torch
 import numpy as np
-
-import trainer
-from trainer import log,architecture,optimizer,scheduler,utils,dataset,saver,task
-# from trainer.saver  import metric_grap
-from trainer.utils import Callback_funcion
-from omegaconf import DictConfig
-
-from typing import *
-from torch.utils.data import DataLoader, WeightedRandomSampler
 import hydra
 import logging
+
+from src import *
+from typing import *
+from torch.utils.data import DataLoader
+from omegaconf import DictConfig
 
 def set_seed(conf : DictConfig) -> None:
     conf.base.seed = int(conf.base.seed, 0)
@@ -23,56 +19,43 @@ def set_seed(conf : DictConfig) -> None:
     torch.cuda.manual_seed(conf.base.seed)
     torch.cuda.manual_seed_all(conf.base.seed)  # if use multi-GPU
     torch.backends.cudnn.deterministic = True
-
+    
 def set_env(conf : DictConfig) -> None: 
-
+    os.environ['CUDA_DEVICE_ORDER'] = "PCI_BUS_ID"
+    os.environ["CUDA_VISIBLE_DEVICES"]= conf.base.env.gpus
     conf.optimizer.params.lr = conf.hyperparameter.lr
     conf.dataset.train.batch_size =   conf.dataset.test.batch_size = conf.hyperparameter.batch_size
     conf.dataset.valid.batch_size = conf.hyperparameter.batch_size
     if conf.scheduler.params.get('T_max', None) is None:
         conf.scheduler.params.T_max = conf.hyperparameter.epochs
 
-    # conf.saver.checkpoint_save_path = conf.logger.log_path
-    # conf.saver.top_save_path = conf.logger.log_path +'/top/'
-
-# log = logging.getLogger(__name__)
-@hydra.main(config_path="conf", config_name="cmpark")
+@hydra.main(config_path="conf", config_name="cmpark_petfinder")
 def run(conf:DictConfig) -> None:
-    
+    set_seed(conf)
     set_env(conf)
-    logger    = log.create(conf)
-    model     = architecture.create(conf.architecture)
+    model = architecture.create(conf.architecture) 
     optim = optimizer.create(conf.optimizer, model)
     sched = scheduler.create(conf.scheduler, optim)
-    losses    = trainer.loss.create(conf.loss)
-    checkpoint_manger     = saver.create(conf)
-    # callback  = Callback_funcion(conf)
-
-    # ema = callback.load_ema(model)
-    # ealry_stop = callback.ealry_stop(patience=40, verbose=True,path=logger.log_path)
+    losses = loss.create(conf.loss)
     
-    # saver = trainer.saver.create(self.conf.saver, model, optimizer)
-    ## setting gpu device
+    call_back  = Callback(conf)
+    ema = call_back.load_ema(model)
+    ealry_stop = call_back.load_early_stop()
+    checkpoint_manger = call_back.load_checkpoint_manger()
     
-    
-    # saver = CheckpointManager(
-    #         save_root=conf.saver.top_save_path,
-    #         mode=conf.saver. ,
-    #         top_k=conf.saver.top_save_path
-    #     )
-
     data_loader = {}
-    for mode in ['train','valid','test']:
+    for mode in ['train','valid']:
         datasetes = dataset.create(conf.dataset,mode=mode)
         data_loader[mode] = DataLoader(dataset=datasetes, 
                                     batch_size = conf.hyperparameter.batch_size,
-                                    shuffle = True if not mode == 'test' else False, 
+                                    shuffle = True if mode == 'train' else False, 
                                     num_workers = conf.hyperparameter.num_workers, 
                                     # sampler = sampler if mode == 'train' else None,
                                     pin_memory = True)
-
-    train = task.Classify(conf,model=model,optim=optim,scheduler=sched,
-                    log=logger,loss=losses,data=data_loader,saver=checkpoint_manger)
+    logger = log.create(conf)
+    train = task.Petfinder_cls(conf,model=model,optim=optim,scheduler=sched,
+                    log=logger,loss=losses,data=data_loader,saver=checkpoint_manger,
+                    callback = {'ema':ema,'elary_stop':ealry_stop})
 
     train.run()
     train.test()

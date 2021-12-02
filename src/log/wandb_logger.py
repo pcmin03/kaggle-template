@@ -18,7 +18,7 @@ import wandb
 
 LOGGER = logging.getLogger(__name__)
 
-class Logger(object):
+class WandbLogger(object):
     ### save dictionary ###
     def __init__(self,
                 version : str,
@@ -31,8 +31,6 @@ class Logger(object):
         self.add_histogram = add_histogram 
         self.conf = conf
         
-        import wandb
-
         try:
             from kaggle_secrets import UserSecretsClient
             user_secrets = UserSecretsClient()

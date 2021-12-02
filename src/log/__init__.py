@@ -1,5 +1,6 @@
 import logging
 from .logger import Logger
+from .wandb_logger import WandbLogger
 # from .mlflow import ML_logger
 
 LOGGER = logging.getLogger(__name__)
@@ -12,6 +13,13 @@ def create(conf):
         log_graph = conf.log.log_graph
         add_histogram = conf.log.add_histogram
         return Logger(version,save_parameter,log_graph,add_histogram,conf)
+    elif conf.log.type == 'wandb':
+        version = conf.log.version
+        save_parameter = conf.log.save_parameter
+        log_graph = conf.log.log_graph
+        add_histogram = conf.log.add_histogram
+        return WandbLogger(version,save_parameter,log_graph,add_histogram,conf)
+
     # elif conf.log.type == 'mlflow': 
         
     #     return ML_logger

@@ -16,13 +16,14 @@ import albumentations as A
 from sklearn.model_selection import StratifiedKFold
 import torch.nn.functional as F
 from sklearn.preprocessing import OneHotEncoder
+from albumentations.pytorch.transforms import ToTensorV2
 
 class PawpularityDataset(Dataset):
-    def __init__(self, root_dir, df, mode=None):
-
+    def __init__(self, root_dir, df, mode,conf):
+        trans_config = conf['transform']
         transforms = {
             "train": A.Compose([
-                A.Resize(CONFIG['img_size'], CONFIG['img_size']),
+                A.Resize(trans_config['img_size'], trans_config['img_size']),
                 A.HorizontalFlip(p=0.5),
                 A.Normalize(
                         mean=[0.485, 0.456, 0.406], 
@@ -33,7 +34,7 @@ class PawpularityDataset(Dataset):
                 ToTensorV2()], p=1.),
             
             "valid": A.Compose([
-                A.Resize(CONFIG['img_size'], CONFIG['img_size']),
+                A.Resize(trans_config['img_size'], trans_config['img_size']),
                 A.Normalize(
                         mean=[0.485, 0.456, 0.406], 
                         std=[0.229, 0.224, 0.225], 
@@ -54,7 +55,9 @@ class PawpularityDataset(Dataset):
         return len(self.df)
     
     def __getitem__(self, index):
-        img_path = self.file_names[index]
+        
+        img_path = str(self.file_names[index])
+        
         img = cv2.imread(img_path)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         target = self.targets[index]

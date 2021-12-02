@@ -6,6 +6,7 @@ from torch import nn
 from . import toy
 from . import custom_unet
 from timm.models import create_model
+from .hybridembed import PawpularityModel
 
 LOGGER = logging.getLogger(__name__)
 def create(conf, num_classes=None):
@@ -16,8 +17,9 @@ def create(conf, num_classes=None):
         if base == 'toy':
             architecture = toy.ToyModel()
         
-        elif base == 'pawpularitymodel'
+        elif base == 'pawpularitymodel':
             architecture = PawpularityModel(base,architecture_name)
+            
             
         else : 
             architecture = create_model(base,pretrained=conf['pretrained'])

@@ -1,4 +1,4 @@
-batch_size: 20
+batch_size: 100
 epochs: 300
-lr: 1e-5
+lr: 1e-6
 num_workers : 8

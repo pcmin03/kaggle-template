@@ -1,21 +1,27 @@
 train:
-  name: endoscopy
+  name: petfinder
   batch_size: ???
   drop_last: True
-  root_dir : "./petfinder-pawpularity-score" 
-  train_dir : './petfinder-pawpularity-score/train'
-  kfold : 0 
+  datapath : "/data/cmpark/PetFinder/data"
+  train_dir : 'train'
+  fold : 0 
+  transform :
+    img_size : 224
   
 valid:
-  name: endoscopy
+  name: petfinder
   batch_size: ???
   drop_last: True
-  train_dir : './petfinder-pawpularity-score/train'
-  kfold : 0 
+  datapath : "/data/cmpark/PetFinder/data"
+  train_dir : 'train'
+  fold : 0 
+  transform :
+    img_size : 224
   
 test:
-  name: endoscopy
+  name: petfinder
   batch_size: ???
   drop_last: False
-  test_dri = './petfinder-pawpularity-score/test'
+  datapath : "/data/cmpark/PetFinder/data"
+  test_dri : 'test'
   
